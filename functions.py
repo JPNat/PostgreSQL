@@ -1,3 +1,5 @@
+import psycopg2
+
 #Aqui será onde teremos as funcionalidades
 
 def create_User(name):

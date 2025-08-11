@@ -35,19 +35,21 @@ try:
         opcao = int(input("\nDigite a opção: ")) # Input único e claro
 
         
-        if opcao == 1:
-                
-            name = input("Qual o nome do Usuário: ")
-            create_User(name)
-            #conn.commit()
-            
-        if opcao == 2:
+        if opcao != 3:
 
-            name = input("Qual o nome que deseja buscar: ")
-            list_User(name)
-            #conn.commit()
+            if opcao == 1:
+                
+                name = input("Qual o nome do Usuário: ")
+                create_User(name)
+                #conn.commit()
             
-        if opcao == 3:
+            if opcao == 2:
+
+                name = input("Qual o nome que deseja buscar: ")
+                list_User(name)
+                #conn.commit()
+            
+        else:
                 
             print("Hasta la vista! \n")
             break
