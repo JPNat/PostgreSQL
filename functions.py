@@ -6,10 +6,18 @@ import psycopg2.extras
 def create_User(cur, roolback):
 
     try:
-        novo_usuario = 'INSERT INTO usuario (email, nome, telefone, credito, senha, cargo_administrador) VALUES (%s, %s, %s, %f, %s, %s, %i)'
+        insert_usuario = 'INSERT INTO usuario (email, nome, telefone, credito, senha, cargo_administrador) VALUES (%s, %s, %s, %f, %s, %s)'
         #with conn.cursor() as cursor:
         #cursor.execute(query, (id, name, email,))
         #conn.commit()
+        insert_value = ('fulaninho@gmail.com', 'Fulaninho Silva Santos', '79 9.1234-4321', 0.00, 'Senha Segura', 'Falso')
+        cur.execute(insert_usuario)
+
+        cur.execute('SELECT * FROM usuario')
+        for record in cur.fetchall():
+            print(record)
+            
+        conn.commit()
 
         print('\n Criado com sucesso!')
 
@@ -28,9 +36,10 @@ def list_User(cur, nome=''):
     for item in cur.fetchall():
         print(item)
 
-
 def commit():
-    print()
+    print() 
+
+
 
 def rollback():
     print()
