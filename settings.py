@@ -1,27 +1,5 @@
-class ItemLog:
-
-    rollback = ''
-    valorNovo = None
-    valorAntigo = None
-
-    def __init__(self, id, type, var):
-        self.id = id
-        self.type = type # start / write / commit / abort / end
-        self.var = var
-    
-    def addRollback (self, command):
-        self.rollback = command
-
-    def rollback(self):
-        return self.rollback
-
-    def addValores(self, valorNovo, valorAntigo):
-        self.valorNovo  = valorNovo
-        self.valorAntigo = valorAntigo
-
 import psycopg2
 import psycopg2.extras
-from functions import create_User, list_User
 
 hostname = 'bancodedadosufs.c6cw1k5vxwqq.us-east-1.rds.amazonaws.com'
 database = 'postgres'
@@ -48,9 +26,39 @@ try:
 except Exception as error:
     print(error)
 
+def read(email):
+    try:
+        if email == '':
+            cur.execute("SELECT * FROM usuario")
+        else :
+            cur.execute("SELECT * FROM usuario WHERE email = %s", (email,))
+    except Exception as e:
+        print(f'Erro: {e}')
+
+def write(item, value):
+    email = input('Insira um Email')
+    nome = input('Insira um nome')
+    n = input('Quantos telefones deseja inserir')
+    telefones = []
+    for x in range(0, n):
+        telefone = input()
+        telefones.append(telefone)
+    credito = int(input('Insira o saldo'))
+    senha = input('Insira uma senha')
+    tipo_usuario = 1
+
+    valores_usuario = (email, nome, telefones, credito, senha, tipo_usuario)
+
+    try:
+        insert_usuario = 'INSERT INTO usuario (email, nome, telefone, credito, senha, tipo_usuario) VALUES (%s, %s, %s, %s, %s, %s);'
+        cur.execute(insert_usuario, valores_usuario)
+        conn.commit();
+    except Exception as e:
+        conn.rollback()
+        return None
 
 
-finally:
+def finish():
     if cur is not None:
         cur.close()
     
