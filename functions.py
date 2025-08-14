@@ -26,10 +26,6 @@ def create_User(cur, conn, rollback, email, nome, telefone, credito, senha, carg
 
 def list_User(cur, nome=''):
 
-    if nome == '':
-        cur.execute(f'SELECT * FROM usuario')
-    else:
-        cur.execute(f'SELECT * FROM usuario WHERE nome = \'{nome}\'')
 
     print()
 
