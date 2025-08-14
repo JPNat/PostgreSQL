@@ -1,9 +1,10 @@
 def readBD(cur, name):
-
-    if name == None:
+    if not name:
         return False
-    
-    try: 
-        cur.execute(f'SELECT * FROM usuario WHERE nome = \'{nome}\'')
-    except:
+        
+    try:
+        cur.execute("SELECT * FROM usuario WHERE nome = %s", (name,))
+        return cur.fetchall() 
+    except Exception as e:
+        print(f"Erro ao consultar banco: {e}")
         return False
