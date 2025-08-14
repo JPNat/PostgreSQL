@@ -4,7 +4,7 @@ def writeBD(cur, conn, rollback, email, nome, telefone, credito, senha, cargo_ad
 
         insert_value = (email, nome, telefone, credito, senha, cargo_administrador)
         
-        for recortd in insert_value:
+        for record in insert_value:
             cur.execute(insert_usuario, record)
 
         cur.execute('SELECT * FROM usuario')
