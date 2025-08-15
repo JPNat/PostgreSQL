@@ -9,8 +9,6 @@ port = 5432
 conn = None
 cur = None
 
-log = list()
-
 try:
     conn = psycopg2.connect(
 
@@ -27,31 +25,36 @@ except Exception as error:
     print(error)
 
 def read(email):
+    local_cur = cur
     try:
         if email == '':
-            cur.execute("SELECT * FROM usuario")
+            local_cur.execute("SELECT * FROM usuario")
         else :
-            cur.execute("SELECT * FROM usuario WHERE email = %s", (email,))
+            local_cur.execute("SELECT * FROM usuario WHERE email = %s", (email,))
     except Exception as e:
         print(f'Erro: {e}')
+    
+    for item in local_cur.fetchall:
+        print(item)
 
-def write(item, value):
-    email = input('Insira um Email')
-    nome = input('Insira um nome')
-    n = input('Quantos telefones deseja inserir')
+def write():
+    local_cur = cur
+    email = input('Insira um Email: ')
+    nome = input('Insira um nome: ')
+    n = input('Quantos telefones deseja inserir: ')
     telefones = []
     for x in range(0, n):
         telefone = input()
         telefones.append(telefone)
-    credito = int(input('Insira o saldo'))
-    senha = input('Insira uma senha')
+    credito = int(input('Insira o saldo: '))
+    senha = input('Insira uma senha: ')
     tipo_usuario = 1
 
     valores_usuario = (email, nome, telefones, credito, senha, tipo_usuario)
 
     try:
         insert_usuario = 'INSERT INTO usuario (email, nome, telefone, credito, senha, tipo_usuario) VALUES (%s, %s, %s, %s, %s, %s);'
-        cur.execute(insert_usuario, valores_usuario)
+        local_cur.execute(insert_usuario, valores_usuario)
         conn.commit();
     except Exception as e:
         conn.rollback()
@@ -64,3 +67,4 @@ def finish():
     
     if conn is not None:
         conn.close()
+
