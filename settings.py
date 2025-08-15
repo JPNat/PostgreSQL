@@ -25,13 +25,13 @@ except Exception as error:
     print(error)
 
 
-def read(email):
+def read(value):
     try:
-        if email == '':
+        if value == '':
             cur.execute("SELECT * FROM usuario")
             return cur.fetchall()
         else :
-            cur.execute("SELECT * FROM usuario WHERE email = %s", (email,))
+            cur.execute("SELECT * FROM usuario WHERE email = %s", (value,))
             return cur.fetchall()
     except Exception as e:
         print(f'Erro: {e}')
