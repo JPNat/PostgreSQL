@@ -1,27 +1,5 @@
-class ItemLog:
-
-    rollback = ''
-    valorNovo = None
-    valorAntigo = None
-
-    def __init__(self, id, type, var):
-        self.id = id
-        self.type = type # start / write / commit / abort / end
-        self.var = var
-    
-    def addRollback (self, command):
-        self.rollback = command
-
-    def rollback(self):
-        return self.rollback
-
-    def addValores(self, valorNovo, valorAntigo):
-        self.valorNovo  = valorNovo
-        self.valorAntigo = valorAntigo
-
 import psycopg2
 import psycopg2.extras
-from functions import create_User, list_User
 
 hostname = 'bancodedadosufs.c6cw1k5vxwqq.us-east-1.rds.amazonaws.com'
 database = 'postgres'
@@ -30,8 +8,6 @@ password = 'GNUrPQ1TSTcjlr779me2'
 port = 5432
 conn = None
 cur = None
-
-log = list()
 
 try:
     conn = psycopg2.connect(
@@ -48,11 +24,47 @@ try:
 except Exception as error:
     print(error)
 
+def read(email):
+    local_cur = cur
+    try:
+        if email == '':
+            local_cur.execute("SELECT * FROM usuario")
+        else :
+            local_cur.execute("SELECT * FROM usuario WHERE email = %s", (email,))
+    except Exception as e:
+        print(f'Erro: {e}')
+    
+    for item in local_cur.fetchall:
+        print(item)
+
+def write():
+    local_cur = cur
+    email = input('Insira um Email: ')
+    nome = input('Insira um nome: ')
+    n = input('Quantos telefones deseja inserir: ')
+    telefones = []
+    for x in range(0, n):
+        telefone = input()
+        telefones.append(telefone)
+    credito = int(input('Insira o saldo: '))
+    senha = input('Insira uma senha: ')
+    tipo_usuario = 1
+
+    valores_usuario = (email, nome, telefones, credito, senha, tipo_usuario)
+
+    try:
+        insert_usuario = 'INSERT INTO usuario (email, nome, telefone, credito, senha, tipo_usuario) VALUES (%s, %s, %s, %s, %s, %s);'
+        local_cur.execute(insert_usuario, valores_usuario)
+        conn.commit();
+    except Exception as e:
+        conn.rollback()
+        return None
 
 
-finally:
+def finish():
     if cur is not None:
         cur.close()
     
     if conn is not None:
         conn.close()
+
